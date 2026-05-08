@@ -2,9 +2,12 @@ services:
   bridge:
     build: .
     image: telegram-discord-bridge:latest
-    container_name: tg-discord-bridge
     restart: unless-stopped
-    env_file: .env
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
+      ALLOWED_CHAT_ID: ${ALLOWED_CHAT_ID:-}
+      INCLUDE_METADATA: ${INCLUDE_METADATA:-true}
     logging:
       driver: json-file
       options:

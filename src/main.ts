@@ -13,6 +13,26 @@ async function bootstrap() {
   };
   console.log('[ENV DIAG]', JSON.stringify(seen));
 
+  // Probe: how many env vars total? Which keys present?
+  const allKeys = Object.keys(process.env).sort();
+  console.log('[ENV COUNT]', allKeys.length);
+  console.log('[ENV KEYS]', allKeys.join(','));
+
+  // Probe: does Dokploy mount .env file?
+  try {
+    const fs = await import('node:fs');
+    const cwd = process.cwd();
+    console.log('[CWD]', cwd);
+    console.log('[CWD LIST]', fs.readdirSync(cwd).join(','));
+    if (fs.existsSync(`${cwd}/.env`)) {
+      console.log('[ENV FILE EXISTS]', fs.statSync(`${cwd}/.env`).size, 'bytes');
+    } else {
+      console.log('[ENV FILE]', 'absent');
+    }
+  } catch (e) {
+    console.log('[FS PROBE FAIL]', (e as Error).message);
+  }
+
   const app = await NestFactory.createApplicationContext(AppModule, {
     logger: ['log', 'error', 'warn', 'debug'],
   });
