@@ -20,12 +20,12 @@ bun run start:dev
 
 ## Env
 
-| Var | Required | Notes |
-|-----|----------|-------|
-| `TELEGRAM_BOT_TOKEN` | yes | from `@BotFather` |
-| `DISCORD_WEBHOOK_URL` | yes | Channel → Integrations → Webhooks |
-| `ALLOWED_CHAT_ID` | no | restrict to one group (numeric, negative for groups) |
-| `INCLUDE_METADATA` | no | `false` to drop sender/chat fields |
+| Var                   | Required | Notes                                                |
+| --------------------- | -------- | ---------------------------------------------------- |
+| `TELEGRAM_BOT_TOKEN`  | yes      | from `@BotFather`                                    |
+| `DISCORD_WEBHOOK_URL` | yes      | Channel → Integrations → Webhooks                    |
+| `ALLOWED_CHAT_ID`     | no       | restrict to one group (numeric, negative for groups) |
+| `INCLUDE_METADATA`    | no       | `false` to drop sender/chat fields                   |
 
 ## Telegram bot setup (BotFather)
 
@@ -49,7 +49,7 @@ Goal: looks like internal devops tooling, not a "data harvesting bot." Pick one 
 - **Username:** `@TeamNotesSync_bot`
 - **About (120 char):** `Mirrors discussion threads to our internal engineering archive. Read-only — keeps the eng team in sync.`
 - **Description (long):** `Internal tool used by our engineering team to mirror group conversations into our shared notes workspace, so devs who are heads-down on tickets do not miss decisions made in chat. Read-only forwarder. Maintained by the platform team.`
-- **Avatar prompt:** *flat minimalist icon, clipboard with a sync arrow, soft slate-blue background, rounded square, no text*
+- **Avatar prompt:** _flat minimalist icon, clipboard with a sync arrow, soft slate-blue background, rounded square, no text_
 
 ### Option B — Build / status mirror
 
@@ -57,7 +57,7 @@ Goal: looks like internal devops tooling, not a "data harvesting bot." Pick one 
 - **Username:** `@ProjectMirror_bot`
 - **About:** `Project chat mirror for distributed engineering team. Forwards messages to our shared workspace.`
 - **Description:** `Lightweight relay our team uses so engineers in different timezones see the same context. No automation, no replies — just a one-way mirror to our internal channel.`
-- **Avatar prompt:** *two overlapping rounded squares with a thin connecting line, navy + cyan, flat design, no text*
+- **Avatar prompt:** _two overlapping rounded squares with a thin connecting line, navy + cyan, flat design, no text_
 
 ### Option C — Standup digest (most innocuous)
 
@@ -65,7 +65,7 @@ Goal: looks like internal devops tooling, not a "data harvesting bot." Pick one 
 - **Username:** `@StandupSync_bot`
 - **About:** `Helps the eng team capture standup-relevant chatter into our shared log. Read-only.`
 - **Description:** `Used by our software engineering team to bridge group discussion into the team log we review during standup. No commands, no replies — silent forwarder.`
-- **Avatar prompt:** *clean checkmark inside a speech bubble, muted green, flat, rounded square 512x512, no text*
+- **Avatar prompt:** _clean checkmark inside a speech bubble, muted green, flat, rounded square 512x512, no text_
 
 ### Tips that lower suspicion further
 
