@@ -33,6 +33,12 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit(): Promise<void> {
+    try {
+      await this.bot.telegram.deleteWebhook({ drop_pending_updates: false });
+      this.logger.log('Cleared any prior webhook registration');
+    } catch (err) {
+      this.logger.warn(`deleteWebhook failed: ${(err as Error).message}`);
+    }
     this.bot.launch().catch((err) => this.logger.error('Bot crashed', err));
     this.logger.log('Telegraf launched');
   }
