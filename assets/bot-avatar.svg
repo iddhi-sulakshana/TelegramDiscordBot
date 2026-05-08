@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- background -->
+  <rect width="512" height="512" rx="112" fill="#4A6B8E"/>
+
+  <!-- clipboard body -->
+  <rect x="148" y="120" width="216" height="280" rx="22" fill="#F4F6FA"/>
+  <!-- clipboard clip -->
+  <rect x="214" y="98" width="84" height="36" rx="10" fill="#2E455F"/>
+
+  <!-- text lines -->
+  <rect x="184" y="170" width="144" height="10" rx="5" fill="#C7D1DE"/>
+  <rect x="184" y="198" width="120" height="10" rx="5" fill="#C7D1DE"/>
+  <rect x="184" y="226" width="136" height="10" rx="5" fill="#C7D1DE"/>
+
+  <!-- sync circle backdrop -->
+  <circle cx="256" cy="320" r="58" fill="#3FA9F5"/>
+
+  <!-- sync arrows: two C-shapes + arrowheads, drawn explicitly -->
+  <!-- top arc going right -->
+  <path d="M 230 308 A 30 30 0 0 1 282 308 L 290 304 L 286 326 L 268 318 L 274 314 A 20 20 0 0 0 240 314 Z"
+        fill="#FFFFFF"/>
+  <!-- bottom arc going left -->
+  <path d="M 282 332 A 30 30 0 0 1 230 332 L 222 336 L 226 314 L 244 322 L 238 326 A 20 20 0 0 0 272 326 Z"
+        fill="#FFFFFF"/>
+</svg>

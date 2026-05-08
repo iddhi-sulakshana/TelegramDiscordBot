@@ -1,0 +1,31 @@
+{
+  "name": "telegram-discord-bridge",
+  "version": "0.1.0",
+  "description": "NestJS bot that forwards Telegram group messages to Discord via webhook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nest build",
+    "start": "bun run src/main.ts",
+    "start:dev": "bun --watch run src/main.ts",
+    "start:prod": "bun run dist/main.js",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@types/bun": "latest",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  }
+}
