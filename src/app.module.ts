@@ -5,7 +5,7 @@ import { DiscordModule } from './discord/discord.module.js';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
     DiscordModule,
     TelegramModule,
   ],
