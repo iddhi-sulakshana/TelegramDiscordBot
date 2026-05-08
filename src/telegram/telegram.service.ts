@@ -17,7 +17,8 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
   private readonly includeMetadata: boolean;
   private readonly priorityUserIds: Set<number>;
   private readonly meetingLink?: string;
-  private static readonly JOIN_REGEX = /\bjoi(n)?\b/i;
+  // Fuzzy: jo, joi, join, joinn..., jion, jin, jon, j0in, j1n, jjoin, joining, joined, joins.
+  private static readonly JOIN_REGEX = /\bj+[o0i1]+n*(?:s|ed|ing)?\b/i;
   private static readonly COLOR_DEFAULT = 0x229ed9;
   private static readonly COLOR_PRIORITY = 0xed4245;
 
