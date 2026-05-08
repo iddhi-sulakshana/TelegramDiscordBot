@@ -128,7 +128,9 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
 
     await this.discord.send({
       username: 'Telegram Bridge',
-      content: isJoin ? '@everyone 🚨 join request from priority user' : undefined,
+      content: isJoin
+        ? `@everyone 🚨 **JOIN REQUEST** from ${sender}${this.meetingLink ? `\n🔗 ${this.meetingLink}` : ''}`
+        : undefined,
       allowed_mentions: isJoin ? { parse: ['everyone'] } : { parse: [] },
       embeds: [
         {
