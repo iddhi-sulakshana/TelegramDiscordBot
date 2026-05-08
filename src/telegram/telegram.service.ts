@@ -15,6 +15,11 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
   private readonly bot: Telegraf;
   private readonly allowedChatId?: number;
   private readonly includeMetadata: boolean;
+  private readonly priorityUserIds: Set<number>;
+  private readonly meetingLink?: string;
+  private static readonly JOIN_REGEX = /\bjoi(n)?\b/i;
+  private static readonly COLOR_DEFAULT = 0x229ed9;
+  private static readonly COLOR_PRIORITY = 0xed4245;
 
   constructor(
     config: ConfigService,
@@ -28,6 +33,18 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
     this.includeMetadata =
       config.get<string>('INCLUDE_METADATA', 'true').toLowerCase() !== 'false';
 
+    const priorityRaw = config.get<string>('PRIORITY_USER_IDS', '');
+    this.priorityUserIds = new Set(
+      priorityRaw
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map(Number)
+        .filter((n) => Number.isFinite(n)),
+    );
+
+    this.meetingLink = config.get<string>('MEETING_LINK')?.trim() || undefined;
+
     this.bot = new Telegraf(token);
     this.registerHandlers();
   }
@@ -39,8 +56,23 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
     } catch (err) {
       this.logger.warn(`deleteWebhook failed: ${(err as Error).message}`);
     }
-    this.bot.launch().catch((err) => this.logger.error('Bot crashed', err));
-    this.logger.log('Telegraf launched');
+    void this.launchWithRetry();
+  }
+
+  private async launchWithRetry(attempt = 1): Promise<void> {
+    try {
+      await this.bot.launch();
+      this.logger.log('Telegraf launched');
+    } catch (err) {
+      const e = err as { response?: { error_code?: number } };
+      const code = e?.response?.error_code;
+      const wait = Math.min(60_000, 2_000 * attempt);
+      this.logger.error(
+        `launch failed (code=${code}, attempt=${attempt}). Retry in ${wait}ms`,
+      );
+      await new Promise((r) => setTimeout(r, wait));
+      return this.launchWithRetry(attempt + 1);
+    }
   }
 
   onModuleDestroy(): void {
@@ -69,22 +101,42 @@ export class TelegramService implements OnModuleInit, OnModuleDestroy {
     const text = this.extractText(msg);
     const mediaUrl = await this.extractMediaUrl(ctx, msg);
 
-    const fields = this.includeMetadata
-      ? [
-          { name: 'From', value: sender, inline: true },
-          { name: 'Chat', value: chatTitle ?? 'Unknown', inline: true },
-        ]
-      : undefined;
+    const senderId = msg.from?.id;
+    const isPriority = senderId !== undefined && this.priorityUserIds.has(senderId);
+    const isJoin =
+      isPriority && typeof text === 'string' && TelegramService.JOIN_REGEX.test(text);
+
+    const fields: Array<{ name: string; value: string; inline?: boolean }> = [];
+    if (this.includeMetadata) {
+      fields.push(
+        { name: 'From', value: sender, inline: true },
+        { name: 'Chat', value: chatTitle ?? 'Unknown', inline: true },
+      );
+    }
+    if (isJoin && this.meetingLink) {
+      fields.push({ name: 'Meeting Link', value: this.meetingLink, inline: false });
+    }
+
+    const color = isPriority
+      ? TelegramService.COLOR_PRIORITY
+      : TelegramService.COLOR_DEFAULT;
+
+    const description = isJoin
+      ? `🚨 **JOIN REQUEST** 🚨\n\n${text}`
+      : text || '_(no text)_';
 
     await this.discord.send({
       username: 'Telegram Bridge',
+      content: isJoin ? '@everyone 🚨 join request from priority user' : undefined,
+      allowed_mentions: isJoin ? { parse: ['everyone'] } : { parse: [] },
       embeds: [
         {
-          description: text || '_(no text)_',
-          color: 0x229ed9,
+          description,
+          url: isJoin ? this.meetingLink : undefined,
+          color,
           timestamp: new Date(msg.date * 1000).toISOString(),
-          footer: { text: `chat_id: ${chat.id}` },
-          fields,
+          footer: { text: `chat_id: ${chat.id}${isPriority ? ' • PRIORITY' : ''}` },
+          fields: fields.length ? fields : undefined,
           image: mediaUrl ? { url: mediaUrl } : undefined,
         },
       ],

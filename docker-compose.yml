@@ -8,6 +8,8 @@ services:
       DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
       ALLOWED_CHAT_ID: ${ALLOWED_CHAT_ID:-}
       INCLUDE_METADATA: ${INCLUDE_METADATA:-true}
+      PRIORITY_USER_IDS: ${PRIORITY_USER_IDS:-}
+      MEETING_LINK: ${MEETING_LINK:-}
     logging:
       driver: json-file
       options:

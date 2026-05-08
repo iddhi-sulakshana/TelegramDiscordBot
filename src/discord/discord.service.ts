@@ -11,9 +11,15 @@ export interface DiscordPayload {
   username?: string;
   avatar_url?: string;
   content?: string;
+  allowed_mentions?: {
+    parse?: Array<'everyone' | 'users' | 'roles'>;
+    users?: string[];
+    roles?: string[];
+  };
   embeds?: Array<{
     title?: string;
     description?: string;
+    url?: string;
     color?: number;
     timestamp?: string;
     footer?: { text: string };
