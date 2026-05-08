@@ -1,0 +1,12 @@
+services:
+  bridge:
+    build: .
+    image: telegram-discord-bridge:latest
+    container_name: tg-discord-bridge
+    restart: unless-stopped
+    env_file: .env
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
